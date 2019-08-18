@@ -1,6 +1,13 @@
 
-# Created by https://www.gitignore.io/api/java,gradle,code-java,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=java,gradle,code-java,visualstudiocode
+# Created by https://www.gitignore.io/api/java,code,gradle,eclipse,code-java,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=java,code,gradle,eclipse,code-java,visualstudiocode
+
+### Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 ### Code-Java ###
 # Language Support for Java(TM) by Red Hat extension for Visual Studio Code - https://marketplace.visualstudio.com/items?itemName=redhat.java
@@ -8,6 +15,73 @@
 .project
 .classpath
 factoryConfiguration.json
+
+### Eclipse ###
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# CDT- autotools
+.autotools
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# Tern plugin
+.tern-project
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# Code Recommenders
+.recommenders/
+
+# Annotation Processing
+.apt_generated/
+
+# Scala IDE specific (Scala & Java development for Eclipse)
+.cache-main
+.scala_dependencies
+.worksheet
+
+### Eclipse Patch ###
+# Eclipse Core
+
+# JDT-specific (Eclipse Java Development Tools)
+
+# Annotation Processing
+.apt_generated
+
+.sts4-cache/
 
 ### Java ###
 # Compiled class file
@@ -35,11 +109,6 @@ factoryConfiguration.json
 hs_err_pid*
 
 ### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
@@ -64,4 +133,4 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-# End of https://www.gitignore.io/api/java,gradle,code-java,visualstudiocode
+# End of https://www.gitignore.io/api/java,code,gradle,eclipse,code-java,visualstudiocode

@@ -25,13 +25,14 @@ public class FlightTest {
     });
   }
 
+  @Test
   public void testValidFlightNumber() {
-    assertThrows(RuntimeException.class, () -> {
-      new Flight("B852", 2);
-    });
-    assertThrows(RuntimeException.class, () -> {
-      new Flight("AA312", 100);
-    });
+    Flight flight = new Flight("B852", 2);
+    assertEquals("B852", flight.getFlightNumber());
+
+    flight = new Flight("AA312", 10);
+
+    assertEquals("AA312", flight.getFlightNumber());    
   }
 
   @Test
@@ -96,15 +97,29 @@ public class FlightTest {
     Flight flight = new Flight("A1890", 2);
     flight.setOrigin("London");
     flight.setDestination("Barranquilla");
-    
-    assertThrows(RuntimeException.class, () -> {
-      flight.land();
-    });
+    flight.takeOff();
 
+    assertEquals(true, flight.isTakenOff());
+    assertEquals(false, flight.isLanded());
+    
+    flight.land();
+
+    assertEquals(true, flight.isTakenOff());
+    assertEquals(true, flight.isLanded());
+    assertEquals(false, flight.isFlying());
+  }
+
+  @Test
+  public void testChangeDestination() {
+    Flight flight = new Flight("A1890", 20);
+    flight.setOrigin("London");
+    flight.setDestination("Barranquilla");
     flight.takeOff();
     flight.land();
-    
-    assertEquals(false, flight.isFlying());
+
+    assertThrows(RuntimeException.class, () -> {
+      flight.setDestination("Medellín");
+    });
   }
 
   @Test

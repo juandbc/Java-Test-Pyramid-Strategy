@@ -11,8 +11,10 @@ public class Flight {
   private String origin;
   private String destination;
   private boolean flying;
-  private String flightNumbrRegex = "^[A-Z]{1,2}\\d{3,4}$";
-  private Pattern pattern = Pattern.compile(flightNumbrRegex);
+  private boolean takenOff;
+  private boolean landed;
+  private String flightNumberRegex = "^[A-Z]{1,2}\\d{3,4}$";
+  private Pattern pattern = Pattern.compile(flightNumberRegex);
 
   /**
    * Crea un nuevo vuelo.
@@ -25,11 +27,13 @@ public class Flight {
     if (!matcher.matches()) {
       throw new RuntimeException("Invalid flight number");
     }
-    
+
     this.flightNumber = flightNumber;
     this.places = places;
     this.passengers = 0;
     this.flying = false;
+    this.takenOff = false;
+    this.landed = false;
   }
 
   public String getFlightNumber() {
@@ -42,13 +46,14 @@ public class Flight {
 
   public void setPlaces(int places) {
     if (passengers > places) {
-      throw new RuntimeException("Cannot reduce the number of places under the number of existing passengers");
+      throw new RuntimeException("Cannot reduce the number of places under the number of existing" 
+          + " passengers!");
     }
     this.places = places;
   }
 
   public int getPassengers() {
-    return this.passengers;
+    return passengers;
   }
 
   public String getOrigin() {
@@ -56,22 +61,33 @@ public class Flight {
   }
 
   public void setOrigin(String origin) {
-    if (isFlying()) { 
-      throw new RuntimeException("Cannot change the its origin any longer");
+    if (takenOff) {
+      throw new RuntimeException("Flight cannot change its origin any longer");
     }
     this.origin = origin;
   }
 
   public String getDestination() {
-    return this.destination;
+    return destination;
   }
 
   public void setDestination(String destination) {
+    if (landed) {
+      throw new RuntimeException("Flight cannot change its destination any longer");
+    }
     this.destination = destination;
   }
 
   public boolean isFlying() {
-    return this.flying;
+    return flying;
+  }
+
+  public boolean isTakenOff() {
+    return takenOff;
+  }
+
+  public boolean isLanded() {
+    return landed;
   }
 
   @Override
@@ -88,8 +104,12 @@ public class Flight {
   }
 
   public void takeOff() {
+    if (takenOff) {
+      throw new RuntimeException("Cannot take off, the flight already taken off");
+    }
     System.out.println(this + " is taking off");
     flying = true;
+    takenOff = true;
   }
 
   public void land() {
@@ -98,6 +118,6 @@ public class Flight {
     }
     System.out.println(this + " is landing");
     flying = false;
+    landed = true;
   }
-
 }

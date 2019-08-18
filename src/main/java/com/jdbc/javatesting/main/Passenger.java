@@ -12,7 +12,8 @@ public class Passenger {
   private String name;
   private String countryCode;
   private String ssnRegex = "^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$";
-  private Pattern pattern = Pattern.compile(ssnRegex);
+  private String noUsIdentifierRegex = "^(?!000|666)[9][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$";
+  private Pattern pattern;
 
   /**
    * Crea un nuevo pasajero.
@@ -26,6 +27,9 @@ public class Passenger {
    * @param countryCode código del país del pasajero
    */
   public Passenger(String identifier, String name, String countryCode) {
+    pattern = countryCode.equals("US") ? Pattern.compile(ssnRegex) : 
+        Pattern.compile(noUsIdentifierRegex);
+
     Matcher matcher = pattern.matcher(identifier);
 
     if (!matcher.matches()) {
