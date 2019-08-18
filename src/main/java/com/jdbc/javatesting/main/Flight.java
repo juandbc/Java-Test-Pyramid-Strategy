@@ -1,5 +1,7 @@
 package com.jdbc.javatesting.main;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,12 +9,13 @@ public class Flight {
 
   private String flightNumber;
   private int places;
-  private int passengers;
+  private Set<Passenger> passengers;
   private String origin;
   private String destination;
   private boolean flying;
   private boolean takenOff;
   private boolean landed;
+
   private String flightNumberRegex = "^[A-Z]{1,2}\\d{3,4}$";
   private Pattern pattern = Pattern.compile(flightNumberRegex);
 
@@ -30,7 +33,7 @@ public class Flight {
 
     this.flightNumber = flightNumber;
     this.places = places;
-    this.passengers = 0;
+    this.passengers = new HashSet<>();
     this.flying = false;
     this.takenOff = false;
     this.landed = false;
@@ -45,15 +48,24 @@ public class Flight {
   }
 
   public void setPlaces(int places) {
-    if (passengers > places) {
+    if (passengers.size() > places) {
       throw new RuntimeException("Cannot reduce the number of places under the number of existing" 
           + " passengers!");
     }
     this.places = places;
   }
 
-  public int getPassengers() {
-    return passengers;
+  public void addPassenger(Passenger passenger) {
+    sellTicket(passenger);
+    this.passengers.add(passenger);
+  }
+
+  public void removePassenger(Passenger passenger) {
+    this.passengers.remove(passenger);
+  }
+
+  public int getPassengersNumber() {
+    return passengers.size();
   }
 
   public String getOrigin() {
@@ -95,12 +107,11 @@ public class Flight {
     return "Flight " + getFlightNumber() + " from " + getOrigin() + " to " + getDestination();
   }
 
-  public void sellTicket() {
-    if (passengers >= places) {
+  private void sellTicket(Passenger passenger) {
+    if (passengers.size() >= places) {
       throw new RuntimeException("Sorry, not enough places");
     }
-    System.out.println("Ticket for " + this + " sold");
-    passengers++;
+    System.out.println("Ticket for flight " + flightNumber + " sold to " + passenger.getName());
   }
 
   public void takeOff() {
@@ -113,7 +124,7 @@ public class Flight {
   }
 
   public void land() {
-    if (!isFlying()) {
+    if (landed) {
       throw new RuntimeException("Cannot land while on earth");
     }
     System.out.println(this + " is landing");

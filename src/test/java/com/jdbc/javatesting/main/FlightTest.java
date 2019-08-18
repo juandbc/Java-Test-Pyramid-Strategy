@@ -4,7 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.jdbc.javatesting.main.Flight;
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 public class FlightTest {
@@ -36,47 +37,50 @@ public class FlightTest {
   }
 
   @Test
-  public void testSellTickets() {
-    Flight flight = new Flight("A1890", 50);
-    flight.setOrigin("London");
-    flight.setDestination("Barranquilla");
-
-    for (int i = 1; i <= flight.getPlaces(); i++) {
-      flight.sellTicket();
-    }
+  public void testSellTickets() throws IOException {
+    Flight flight = FlightBuilderUtil.buildFlightFromCsv();
+    
     assertEquals(50, flight.getPlaces());
     assertThrows(RuntimeException.class, () -> {
-      flight.sellTicket();
+      flight.addPassenger(new Passenger("999-12-0102", "Fulanita", "CO"));
     });
   }
 
   @Test
-  public void testSetInvalidPlaces() {
-    Flight flight = new Flight("A1890", 20);
-    flight.setOrigin("London");
-    flight.setDestination("Barranquilla");
-    for (int i = 1; i <= flight.getPlaces(); i++) {
-      flight.sellTicket();
-    }
-    assertEquals(20, flight.getPlaces());
+  public void testAddOrRemovePassenger() throws IOException {
+    Flight flight = FlightBuilderUtil.buildFlightFromCsv();
+    flight.setPlaces(100);
+    
+    assertEquals(50, flight.getPassengersNumber());
+
+    Passenger additionalPassenger = new Passenger("953-54-9787", "Ana", "CO");
+    flight.addPassenger(additionalPassenger);
+
+    assertEquals(51, flight.getPassengersNumber());
+
+    flight.removePassenger(additionalPassenger);
+
+    assertEquals(50, flight.getPassengersNumber());
+  }
+
+  @Test
+  public void testSetInvalidPlaces() throws IOException {
+    Flight flight = FlightBuilderUtil.buildFlightFromCsv();
+    
     assertThrows(RuntimeException.class, () -> {
       flight.setPlaces(10);
     });
   }
 
   @Test
-  public void testSetValidPlaces() {
-    Flight flight = new Flight("A1890", 20);
-    flight.setOrigin("London");
-    flight.setDestination("Barranquilla");
-    for (int i = 1; i <= flight.getPlaces(); i++) {
-      flight.sellTicket();
-    }
-    assertEquals(20, flight.getPlaces());
+  public void testSetValidPlaces() throws IOException {
+    Flight flight = FlightBuilderUtil.buildFlightFromCsv();
 
-    flight.setPlaces(30);
+    assertEquals(50, flight.getPlaces());
 
-    assertEquals(30, flight.getPlaces());
+    flight.setPlaces(70);
+
+    assertEquals(70, flight.getPlaces());
   }
 
   @Test
@@ -93,6 +97,18 @@ public class FlightTest {
   }
 
   @Test
+  public void testTakeOff() {
+    Flight flight = new Flight("A1890", 2);
+    flight.setOrigin("London");
+    flight.setDestination("Barranquilla");
+    flight.takeOff();
+
+    assertThrows(RuntimeException.class, () -> {
+      flight.takeOff();
+    });
+  }
+
+  @Test
   public void testLand() {
     Flight flight = new Flight("A1890", 2);
     flight.setOrigin("London");
@@ -104,6 +120,9 @@ public class FlightTest {
     
     flight.land();
 
+    assertThrows(RuntimeException.class, () -> {
+      flight.land();
+    });
     assertEquals(true, flight.isTakenOff());
     assertEquals(true, flight.isLanded());
     assertEquals(false, flight.isFlying());

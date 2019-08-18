@@ -13,6 +13,13 @@ class PassengerTest {
   public void testPassengerCreation() {
     Passenger passenger = new Passenger("123-45-6789", "Fulanito", "US");
     assertNotNull(passenger, "Test Failed, the Object passenger is null");
+
+    assertThrows(RuntimeException.class, () -> {
+      new Passenger("123-45-6789", "Fulanito", "CO");
+    });
+    assertThrows(RuntimeException.class, () -> {
+      new Passenger("901-45-6789", "Fulanito", "UK");
+    });
   }
 
   @Test
@@ -21,22 +28,30 @@ class PassengerTest {
       new Passenger("123-456-78", "Fulanito", "US");
     });
     assertThrows(RuntimeException.class, () -> {
-      new Passenger("957-456-7800", "Fulanito", "US");
+      new Passenger("957-45-7800", "Fulanito", "US");
+    });
+    assertThrows(RuntimeException.class, () -> {
+      new Passenger("257-45-7800", "Fulanito", "CO");
     });
   }
 
   @Test
   public void testInvalidCountryCode() {
     assertThrows(RuntimeException.class, () -> {
-      new Passenger("900-456-789", "Fulanito", "VH");
+      new Passenger("666-99-7890", "Fulanito", "CE");
     });
   }
 
   @Test
   public void testSetInvalidSSn() {
     assertThrows(RuntimeException.class, () -> {
-      Passenger passenger = new Passenger("123-456-789", "Fulanito", "VH");
+      Passenger passenger = new Passenger("000-16-7890", "Fulanito", "CO");
       passenger.setIdentifier(".");
+    });
+
+    assertThrows(RuntimeException.class, () -> {
+      Passenger passenger = new Passenger("001-16-7890", "Fulanito", "US");
+      passenger.setIdentifier("63");
     });
   }
 
@@ -51,7 +66,7 @@ class PassengerTest {
   @Test
   public void testSetInvalidCountryCode() {
     assertThrows(RuntimeException.class, () -> {
-      Passenger passenger = new Passenger("123-45-789", "Fulanito", "US");
+      Passenger passenger = new Passenger("123-45-7890", "Fulanito", "US");
       passenger.setCountryCode("UK");
     });
   }
